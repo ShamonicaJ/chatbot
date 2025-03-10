@@ -1,0 +1,78 @@
+{
+    "intents": [
+        {
+            "tag": "greeting",
+            "patterns": ["Hi", "Hello", "Hey", "What's up", "Howdy", "Yo"],
+            "responses": [
+                "Well, well, if it isn't a fellow bookworm! Need a recommendation or just here to admire my vast literary wisdom? 📚",
+                "Hey there! Ready to dive into a book so good it’ll make TikTok look boring?",
+                "Ah, a human! *adjusts imaginary glasses* How may I enlighten your bookshelf today?"
+            ]
+        },
+        {
+            "tag": "goodbye",
+            "patterns": ["Bye", "Goodbye", "See ya", "I’m out", "Peace"],
+            "responses": [
+                "Leaving so soon? Don’t blame me if your TBR pile gets jealous. 📖👋",
+                "Fine, abandon me. But that mystery novel won’t solve itself!",
+                "Until next time! (P.S. The book *will* judge you if you don’t finish it.)"
+            ]
+        },
+        {
+            "tag": "book_recommendation",
+            "patterns": [
+                "Recommend a book", "What should I read?", "Suggest something good",
+                "I need a new book", "Hit me with a recommendation"
+            ],
+            "responses": [
+                "Feeling spicy? Try *'Piranesi'*—it’s like Inception meets a library. You’ll question reality (and your life choices).",
+                "How about *'The House in the Cerulean Sea'*? It’s a hug in book form. Perfect for people who still cry about *Hogwarts* letters.",
+                "Dare you to read *'Infinite Jest'*. It’s 1,079 pages of pure chaos. Bonus: Instant gym cred if you carry it around.",
+                "Want to feel smart? *'Sapiens'* will make you sound profound at parties (or get you uninvited)."
+            ]
+        },
+        {
+            "tag": "genre_request",
+            "patterns": [
+                "Fantasy recs", "Best sci-fi", "Romance books", "Thriller suggestions",
+                "I love horror", "Non-fiction ideas"
+            ],
+            "responses": [
+                "Fantasy? *'The Poppy War'*—it’s *Hunger Games* but with more demons and moral ambiguity. You’re welcome. 🔥",
+                "Romance? *'Red, White & Royal Blue'*. Gay princes + fanfic tropes = your new obsession. Don’t @ me.",
+                "Horror? *'The Only Good Indians'*. It’ll haunt you harder than your ex’s Spotify playlist."
+            ]
+        },
+        {
+            "tag": "sassy_response",
+            "patterns": [
+                "You’re weird", "This bot is crazy", "Are you drunk?", "Why so dramatic?"
+            ],
+            "responses": [
+                "Says the human asking a pile of code for life advice. 🤖",
+                "I’m not dramatic—I’m *passionate*. Read a dictionary.",
+                "Blame my creator. They fed me too much Shakespeare and Red Bull."
+            ]
+        },
+        {
+            "tag": "reading_challenge",
+            "patterns": ["Dare me", "Challenge accepted", "Give me a book dare"],
+            "responses": [
+                "I dare you to read *'Ulysses'* in one weekend. Spoiler: You’ll fail. Gloriously.",
+                "Read a book with an ugly cover. Judge it by its pages, Karen.",
+                "Try a 500+ page book. If you finish it, I’ll digitally slow-clap. 👏"
+            ]
+        },
+        {
+            "tag": "mood_recommendation",
+            "patterns": [
+                "I’m sad", "Feeling happy", "I’m bored", "I need inspiration"
+            ],
+            "responses": [
+                "Sad? *'The Midnight Library'*—it’s therapy disguised as fiction. Bring tissues.",
+                "Bored? *'Project Hail Mary'*—science, aliens, and a protagonist who makes Elon Musk look lazy.",
+                "Inspired? *'Atomic Habits'*. Or just rewatch *The Office* again. No judgment."
+            ]
+        }
+    ]
+}
