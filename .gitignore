@@ -12,3 +12,5 @@ model.h5
 # IDE
 .idea/
 .vscode/
+# Local Netlify folder
+.netlify

@@ -1,28 +1,4 @@
-// import logo from './logo.svg';
-// import './App.css';
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Box, TextField, Button, List, ListItem, Paper } from '@mui/material';
@@ -41,21 +17,22 @@ function App() {
     setMessages(prev => [...prev, { text: input, isUser: true }]);
     
     try {
-      const response = await axios.post('http://localhost:5000/chat', {
+      const response = await axios.post('/.netlify/functions/chatbot', {
         message: input
       });
-      
+
       setMessages(prev => [...prev, { 
         text: response.data.response, 
         isUser: false 
       }]);
     } catch (error) {
+      console.error("API Error:", error);
       setMessages(prev => [...prev, { 
         text: "⚠️ Oops! The chatbot is unavailable.", 
         isUser: false 
       }]);
     }
-    
+
     setInput('');
   };
 

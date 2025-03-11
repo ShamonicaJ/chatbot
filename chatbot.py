@@ -183,6 +183,43 @@ except (IOError, OSError):
 #      DATABASE OPERATIONS
 # ==============================
 
+# def process_user_input(user_input):
+#     """Main processing pipeline for user input"""
+#     print(f"\n🔍 Processing input: '{user_input}'")
+    
+#     try:
+#         store_user_query(
+#             db_name='new_books_db',
+#             user_id='anonymous',  # Replace with actual user ID system if available
+#             query_text=user_input
+#         )
+#     except Exception as e:
+#         print(f"{Fore.YELLOW}⚠️ Failed to store query: {e}{Style.RESET_ALL}")
+
+#     # Handle recommendation intent first
+#     if any(keyword in user_input.lower() for keyword in ["recommend", "suggest", "read", "what should i"]):
+#         return handle_recommendation_flow()
+
+#     # Existing book response check
+#     response = get_book_recommendation(
+#     'new_books_db',  # ✅ Use main database
+#     "SELECT bot_responses FROM book_responses WHERE user_patterns LIKE ?",
+#     (f"%{user_input}%",)
+# )
+#     if response:
+#         return random.choice(response[0].split(','))
+
+#     # NLP model prediction for other intents
+#     bow = bag_of_words(user_input, words)
+#     prediction = model.predict(bow, verbose=0)[0]
+#     tag = labels[np.argmax(prediction)]
+
+#     if prediction.max() > 0.5:
+#         for intent in intents_data["intents"]:
+#             if intent["tag"] == tag:
+#                 return f"{Fore.BLUE}Bot:{Style.RESET_ALL} {random.choice(intent['responses'])}   (Category: {tag})"
+
+#     return f"{Fore.RED}Bot:{Style.RESET_ALL} I'm not sure I understand. Could you rephrase that?"
 def process_user_input(user_input):
     """Main processing pipeline for user input"""
     print(f"\n🔍 Processing input: '{user_input}'")
@@ -196,20 +233,29 @@ def process_user_input(user_input):
     except Exception as e:
         print(f"{Fore.YELLOW}⚠️ Failed to store query: {e}{Style.RESET_ALL}")
 
-    # Handle recommendation intent first
+    # 1️⃣ Attempt to fetch from book_responses FIRST
+    response = get_book_recommendation(
+        'new_books_db',
+        "SELECT bot_responses FROM book_responses WHERE user_patterns LIKE ?",
+        (f"%{user_input}%",)
+    )
+
+    if response:
+        # 2️⃣ Dynamically replace {title}, {author}, {rating}, {year} with real book data
+        book_data = get_random_recommendation()
+        if book_data:
+            title, author, rating, year = book_data
+            formatted_response = response[0].format(title=title, author=author, rating=rating, year=year)
+            return formatted_response
+        
+        # Fallback if book data retrieval fails
+        return response[0]
+
+    # 3️⃣ If no match in book_responses, proceed to recommendation flow
     if any(keyword in user_input.lower() for keyword in ["recommend", "suggest", "read", "what should i"]):
         return handle_recommendation_flow()
 
-    # Existing book response check
-    response = get_book_recommendation(
-    'new_books_db',  # ✅ Use main database
-    "SELECT bot_responses FROM book_responses WHERE user_patterns LIKE ?",
-    (f"%{user_input}%",)
-)
-    if response:
-        return random.choice(response[0].split(','))
-
-    # NLP model prediction for other intents
+    # 4️⃣ NLP Model Prediction for Additional Intent Detection
     bow = bag_of_words(user_input, words)
     prediction = model.predict(bow, verbose=0)[0]
     tag = labels[np.argmax(prediction)]
@@ -220,6 +266,7 @@ def process_user_input(user_input):
                 return f"{Fore.BLUE}Bot:{Style.RESET_ALL} {random.choice(intent['responses'])}   (Category: {tag})"
 
     return f"{Fore.RED}Bot:{Style.RESET_ALL} I'm not sure I understand. Could you rephrase that?"
+
 # ==============================
 #     RECOMMENDATION HANDLING 
 # ==============================
@@ -300,6 +347,25 @@ def handle_recommendation_flow():
     
     return recommendation or f"{Fore.RED}No recommendations available at the moment.{Style.RESET_ALL}"
 
+# def get_random_recommendation():
+#     """Get recommendation with debug logging"""
+#     query = """
+#     SELECT title, authors, rating, publish_year 
+#     FROM books
+#     WHERE rating > 0
+#     ORDER BY RANDOM()
+#     LIMIT 1
+# """
+#     try:
+#         result = get_book_recommendation('new_books_db', query, ())  # 👈 Add try here
+#     except Exception as e:
+#         print(f"{Fore.RED}Recommendation error: {e}{Style.RESET_ALL}")
+#         return None
+    
+#     if result:
+#         return format_recommendation(result)
+                
+#     return None
 def get_random_recommendation():
     """Get recommendation with debug logging"""
     query = """
@@ -308,17 +374,17 @@ def get_random_recommendation():
     WHERE rating > 0
     ORDER BY RANDOM()
     LIMIT 1
-"""
+    """
     try:
-        result = get_book_recommendation('new_books_db', query, ())  # 👈 Add try here
+        result = get_book_recommendation('new_books_db', query, ())
+        if result:
+            return result  # Returns full book details (title, author, rating, year)
     except Exception as e:
         print(f"{Fore.RED}Recommendation error: {e}{Style.RESET_ALL}")
         return None
-    
-    if result:
-        return format_recommendation(result)
-                
+
     return None
+
 # ==============================
 #     FORMATTING UTILITIES
 # ==============================
