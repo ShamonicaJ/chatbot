@@ -333,8 +333,8 @@ def get_book_recommendation(db_name, query, params, retries=3):
         result = cursor.fetchone()  # Fetching one result
 
         if result:
-            print(f"DEBUG - Database query result: {result}")  # Debugging the result
-            # Unpacking the result into variables
+            # print(f"DEBUG - Database query result: {result}")  # Debugging the result
+            # # Unpacking the result into variables
             title, author, rating, publish_year = result
             return f"📚 Recommendation: {title} by {author} ⭐ Rating: {rating}/5 | 📅 Published: {publish_year}"
         
