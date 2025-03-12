@@ -1,6 +1,11 @@
-[build]
-  command = "npm run build"
-  publish = "chatbot-ui/build"
 
-[functions]
-  directory = "netlify/functions"
+  [build]
+  functions = "netlify/functions"  # Where serverless functions are stored
+  publish = "chatbot-ui"  # Path to the frontend directory
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"  # Redirect API requests to Netlify functions
+  status = 200
+  force = true
+
