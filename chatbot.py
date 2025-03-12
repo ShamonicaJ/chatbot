@@ -183,43 +183,86 @@ except (IOError, OSError):
 #      DATABASE OPERATIONS
 # ==============================
 
-def process_user_input(user_input):
-    """Main processing pipeline for user input"""
-    print(f"\n🔍 Processing input: '{user_input}'")
+# def process_user_input(user_input):
+#     """Main processing pipeline for user input"""
+#     print(f"\n🔍 Processing input: '{user_input}'")
     
-    try:
-        store_user_query(
-            db_name='new_books_db',
-            user_id='anonymous',  # Replace with actual user ID system if available
-            query_text=user_input
-        )
-    except Exception as e:
-        print(f"{Fore.YELLOW}⚠️ Failed to store query: {e}{Style.RESET_ALL}")
+#     try:
+#         store_user_query(
+#             db_name='new_books_db',
+#             user_id='anonymous',  # Replace with actual user ID system if available
+#             query_text=user_input
+#         )
+#     except Exception as e:
+#         print(f"{Fore.YELLOW}⚠️ Failed to store query: {e}{Style.RESET_ALL}")
 
-    # Handle recommendation intent first
-    if any(keyword in user_input.lower() for keyword in ["recommend", "suggest", "read", "what should i"]):
-        return handle_recommendation_flow()
+#     # Handle recommendation intent first
+#     if any(keyword in user_input.lower() for keyword in ["recommend", "suggest", "read", "what should i"]):
+#         return handle_recommendation_flow()
 
-    # Existing book response check
-    response = get_book_recommendation(
-    'new_books_db',  # ✅ Use main database
-    "SELECT bot_responses FROM book_responses WHERE user_patterns LIKE ?",
-    (f"%{user_input}%",)
-)
-    if response:
-        return random.choice(response[0].split(','))
+#     # Existing book response check
+#     response = get_book_recommendation(
+#     'new_books_db',  # ✅ Use main database
+#     "SELECT bot_responses FROM book_responses WHERE user_patterns LIKE ?",
+#     (f"%{user_input}%",)
+# )
+#     if response:
+#         return random.choice(response[0].split(','))
 
-    # NLP model prediction for other intents
-    bow = bag_of_words(user_input, words)
-    prediction = model.predict(bow, verbose=0)[0]
-    tag = labels[np.argmax(prediction)]
+#     # NLP model prediction for other intents
+#     bow = bag_of_words(user_input, words)
+#     prediction = model.predict(bow, verbose=0)[0]
+#     tag = labels[np.argmax(prediction)]
 
-    if prediction.max() > 0.5:
-        for intent in intents_data["intents"]:
-            if intent["tag"] == tag:
-                return f"{Fore.BLUE}Bot:{Style.RESET_ALL} {random.choice(intent['responses'])}   (Category: {tag})"
+#     if prediction.max() > 0.5:
+#         for intent in intents_data["intents"]:
+#             if intent["tag"] == tag:
+#                 return f"{Fore.BLUE}Bot:{Style.RESET_ALL} {random.choice(intent['responses'])}   (Category: {tag})"
 
-    return f"{Fore.RED}Bot:{Style.RESET_ALL} I'm not sure I understand. Could you rephrase that?"
+#     return f"{Fore.RED}Bot:{Style.RESET_ALL} I'm not sure I understand. Could you rephrase that?"
+# def process_user_input(user_input):
+#     """Main processing pipeline for user input"""
+#     print(f"\n🔍 Processing input: '{user_input}'")
+    
+#     try:
+#         store_user_query(
+#             db_name='new_books_db',
+#             user_id='anonymous',  # Replace with actual user ID system if available
+#             query_text=user_input
+#         )
+#     except Exception as e:
+#         print(f"{Fore.YELLOW}⚠️ Failed to store query: {e}{Style.RESET_ALL}")
+
+#     # ✅ Step 1: Check for greeting responses in intents.json
+#     for intent in intents_data["intents"]:
+#         if intent["tag"] == "greeting" and any(pattern.lower() in user_input.lower() for pattern in intent["patterns"]):
+#             return random.choice(intent['responses'])
+
+#     # ✅ Step 2: Handle recommendation intent via database
+#     if any(keyword in user_input.lower() for keyword in ["recommend", "suggest", "read", "what should i"]):
+#         return handle_recommendation_flow()
+
+#     # ✅ Step 3: Search for additional custom responses in database
+#     response = get_book_recommendation(
+#         'new_books_db',
+#         "SELECT bot_responses FROM book_responses WHERE user_patterns LIKE ?",
+#         (f"%{user_input}%",)
+#     )
+#     if response:
+#         return random.choice(response[0].split(','))
+
+#     # ✅ Step 4: NLP Model prediction for fallback intents (e.g., mood, sass)
+#     bow = bag_of_words(user_input, words)
+#     prediction = model.predict(bow, verbose=0)[0]
+#     tag = labels[np.argmax(prediction)]
+
+#     if prediction.max() > 0.5:
+#         for intent in intents_data["intents"]:
+#             if intent["tag"] == tag:
+#                 return f"{Fore.BLUE}Bot:{Style.RESET_ALL} {random.choice(intent['responses'])}   (Category: {tag})"
+
+#     # ✅ Step 5: Fallback response
+#     return f"🤖 I'm not sure I understand. Try asking for a book recommendation!"
 def process_user_input(user_input):
     """Main processing pipeline for user input"""
     print(f"\n🔍 Processing input: '{user_input}'")
@@ -263,6 +306,7 @@ def process_user_input(user_input):
 
     # ✅ Step 5: Fallback response
     return f"🤖 I'm not sure I understand. Try asking for a book recommendation!"
+
 
 # ==============================
 #     RECOMMENDATION HANDLING 
