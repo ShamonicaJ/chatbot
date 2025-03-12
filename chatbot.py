@@ -27,7 +27,7 @@ import sqlite3
 from database.db_connection import create_connection
 from database.db_operations import store_user_query
 from sklearn.model_selection import train_test_split
-# from database.db_operations import store_user_query
+
 
 # TensorFlow configuration
 import os
@@ -183,86 +183,6 @@ except (IOError, OSError):
 #      DATABASE OPERATIONS
 # ==============================
 
-# def process_user_input(user_input):
-#     """Main processing pipeline for user input"""
-#     print(f"\n🔍 Processing input: '{user_input}'")
-    
-#     try:
-#         store_user_query(
-#             db_name='new_books_db',
-#             user_id='anonymous',  # Replace with actual user ID system if available
-#             query_text=user_input
-#         )
-#     except Exception as e:
-#         print(f"{Fore.YELLOW}⚠️ Failed to store query: {e}{Style.RESET_ALL}")
-
-#     # Handle recommendation intent first
-#     if any(keyword in user_input.lower() for keyword in ["recommend", "suggest", "read", "what should i"]):
-#         return handle_recommendation_flow()
-
-#     # Existing book response check
-#     response = get_book_recommendation(
-#     'new_books_db',  # ✅ Use main database
-#     "SELECT bot_responses FROM book_responses WHERE user_patterns LIKE ?",
-#     (f"%{user_input}%",)
-# )
-#     if response:
-#         return random.choice(response[0].split(','))
-
-#     # NLP model prediction for other intents
-#     bow = bag_of_words(user_input, words)
-#     prediction = model.predict(bow, verbose=0)[0]
-#     tag = labels[np.argmax(prediction)]
-
-#     if prediction.max() > 0.5:
-#         for intent in intents_data["intents"]:
-#             if intent["tag"] == tag:
-#                 return f"{Fore.BLUE}Bot:{Style.RESET_ALL} {random.choice(intent['responses'])}   (Category: {tag})"
-
-#     return f"{Fore.RED}Bot:{Style.RESET_ALL} I'm not sure I understand. Could you rephrase that?"
-# def process_user_input(user_input):
-#     """Main processing pipeline for user input"""
-#     print(f"\n🔍 Processing input: '{user_input}'")
-    
-#     try:
-#         store_user_query(
-#             db_name='new_books_db',
-#             user_id='anonymous',  # Replace with actual user ID system if available
-#             query_text=user_input
-#         )
-#     except Exception as e:
-#         print(f"{Fore.YELLOW}⚠️ Failed to store query: {e}{Style.RESET_ALL}")
-
-#     # ✅ Step 1: Check for greeting responses in intents.json
-#     for intent in intents_data["intents"]:
-#         if intent["tag"] == "greeting" and any(pattern.lower() in user_input.lower() for pattern in intent["patterns"]):
-#             return random.choice(intent['responses'])
-
-#     # ✅ Step 2: Handle recommendation intent via database
-#     if any(keyword in user_input.lower() for keyword in ["recommend", "suggest", "read", "what should i"]):
-#         return handle_recommendation_flow()
-
-#     # ✅ Step 3: Search for additional custom responses in database
-#     response = get_book_recommendation(
-#         'new_books_db',
-#         "SELECT bot_responses FROM book_responses WHERE user_patterns LIKE ?",
-#         (f"%{user_input}%",)
-#     )
-#     if response:
-#         return random.choice(response[0].split(','))
-
-#     # ✅ Step 4: NLP Model prediction for fallback intents (e.g., mood, sass)
-#     bow = bag_of_words(user_input, words)
-#     prediction = model.predict(bow, verbose=0)[0]
-#     tag = labels[np.argmax(prediction)]
-
-#     if prediction.max() > 0.5:
-#         for intent in intents_data["intents"]:
-#             if intent["tag"] == tag:
-#                 return f"{Fore.BLUE}Bot:{Style.RESET_ALL} {random.choice(intent['responses'])}   (Category: {tag})"
-
-#     # ✅ Step 5: Fallback response
-#     return f"🤖 I'm not sure I understand. Try asking for a book recommendation!"
 def process_user_input(user_input):
     """Main processing pipeline for user input"""
     print(f"\n🔍 Processing input: '{user_input}'")
@@ -385,25 +305,25 @@ def handle_recommendation_flow():
     
     return recommendation or f"{Fore.RED}No recommendations available at the moment.{Style.RESET_ALL}"
 
-def get_random_recommendation():
-    """Get recommendation with debug logging"""
-    query = """
-    SELECT title, authors, rating, publish_year 
-    FROM books
-    WHERE rating > 0
-    ORDER BY RANDOM()
-    LIMIT 1
-"""
-    try:
-        result = get_book_recommendation('new_books_db', query, ())  # 👈 Add try here
-    except Exception as e:
-        print(f"{Fore.RED}Recommendation error: {e}{Style.RESET_ALL}")
-        return None
+# def get_random_recommendation():
+#     """Get recommendation with debug logging"""
+#     query = """
+#     SELECT title, authors, rating, publish_year 
+#     FROM books
+#     WHERE rating > 0
+#     ORDER BY RANDOM()
+#     LIMIT 1
+# """
+#     try:
+#         result = get_book_recommendation('new_books_db', query, ())  # 👈 Add try here
+#     except Exception as e:
+#         print(f"{Fore.RED}Recommendation error: {e}{Style.RESET_ALL}")
+#         return None
     
-    if result:
-        return format_recommendation(result)
+#     if result:
+#         return format_recommendation(result)
                 
-    return None
+#     return None
 def get_random_recommendation():
     """Get recommendation with debug logging"""
     query = """
@@ -609,24 +529,24 @@ if __name__ == "__main__":
     
     # Load book data (ensure this function exists)
     load_books_data()
-    test_conn = create_connection('new_books_db')
-if test_conn:
-    try:
-        test_conn.row_factory = sqlite3.Row
-        cursor = test_conn.cursor()
+#     test_conn = create_connection('new_books_db')
+# if test_conn:
+#     try:
+#         test_conn.row_factory = sqlite3.Row
+#         cursor = test_conn.cursor()
         
-        # Check books table
-        cursor.execute("SELECT COUNT(*) FROM books")
-        book_count = cursor.fetchone()[0]
-        print(f"{Fore.GREEN}✅ Books in database: {book_count}{Style.RESET_ALL}")
+#         # Check books table
+#         cursor.execute("SELECT COUNT(*) FROM books")
+#         book_count = cursor.fetchone()[0]
+#         print(f"{Fore.GREEN}✅ Books in database: {book_count}{Style.RESET_ALL}")
         
-        # Check sample ratings
-        cursor.execute("SELECT rating FROM books LIMIT 5")
-        sample_ratings = [row['rating'] for row in cursor.fetchall()]
-        print(f"{Fore.GREEN}📊 Sample ratings: {sample_ratings}{Style.RESET_ALL}")
+#         # Check sample ratings
+#         cursor.execute("SELECT rating FROM books LIMIT 5")
+#         sample_ratings = [row['rating'] for row in cursor.fetchall()]
+#         print(f"{Fore.GREEN}📊 Sample ratings: {sample_ratings}{Style.RESET_ALL}")
         
-    finally:
-        test_conn.close()
+#     finally:
+#         test_conn.close()
     
     # Start chat interface
     chat_interface()
