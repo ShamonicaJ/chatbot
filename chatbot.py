@@ -61,10 +61,10 @@ def load_intents_data():
     try:
         current_dir = os.path.dirname(os.path.abspath(__file__))  # Add this
         intent_path = os.path.join(current_dir, "intents.json")   # Add this
-        print(f"🕵️ Looking for intents.json at: {intent_path}")  # Debug line
+        # print(f"🕵️ Looking for intents.json at: {intent_path}")  # Debug line
         
         with open(intent_path, "r", encoding="utf-8") as file:  # Modified
-            print("✅ Successfully loaded intents.json")  # Debug line
+            # print("✅ Successfully loaded intents.json")  # Debug line
             return json.load(file)
     except Exception as e:
         print(f"{Fore.RED}🚨 Critical Error loading intents.json: {e}{Style.RESET_ALL}")
@@ -199,7 +199,7 @@ except (IOError, OSError):
 def process_user_input(user_input):
     """Main processing pipeline for user input"""
         # print(f"\n🔍 Processing input: '{user_input}'")
-    print(f"📝 Raw input debug: '{user_input}' (length: {len(user_input)}, hex: {user_input.encode('utf-8').hex()})")  # NEW DEBUG LINE
+    # print(f"📝 Raw input debug: '{user_input}' (length: {len(user_input)}, hex: {user_input.encode('utf-8').hex()})")  # NEW DEBUG LINE
     print(f"\n🔍 Processing input: '{user_input}'")
     
     try:
@@ -218,16 +218,16 @@ def process_user_input(user_input):
     #         print(f"  🔑 Greeting patterns: {intent['patterns']}")  # NEW DEBUG LINE
     #         return random.choice(intent['responses'])
         # ✅ Step 1: Check for greeting responses in intents.json
-    print("\n🔎 Checking greeting patterns:")  # NEW DEBUG LINE
+   
     user_input_clean = user_input.lower().strip()
     for intent in intents_data["intents"]:
         if intent["tag"] == "greeting":
-            print(f"  🔑 Greeting patterns: {intent['patterns']}")  # NEW DEBUG LINE
+           
             for pattern in intent["patterns"]:
                 pattern_clean = pattern.lower().strip()
                 print(f"    🧩 Checking pattern: '{pattern_clean}' vs input: '{user_input_clean}'")  # NEW DEBUG LINE
                 if pattern_clean in user_input_clean:
-                    print("    🎯 EXACT MATCH FOUND!")  # NEW DEBUG LINE
+               
                     return random.choice(intent['responses'])
 
     # ✅ Step 2: Handle recommendation intent via database
